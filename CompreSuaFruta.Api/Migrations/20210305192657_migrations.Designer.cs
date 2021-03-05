@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CompreSuaFruta.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210305124240_MigrationName")]
-    partial class MigrationName
+    [Migration("20210305192657_migrations")]
+    partial class migrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

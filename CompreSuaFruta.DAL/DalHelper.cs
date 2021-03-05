@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Data.SQLite;
+using System.IO;
 
 namespace CompreSuaFruta.Dal
 {
-    class DalHelper
+    public class DalHelper
     {
         private static SQLiteConnection sqliteConnection;
         public DalHelper()
@@ -16,18 +17,23 @@ namespace CompreSuaFruta.Dal
             sqliteConnection.Open();
             return sqliteConnection;
         }
-        public static void CriarBancoSQLite()
+        public void CriarBancoSQLite()
         {
             try
             {
-                SQLiteConnection.CreateFile(@"c:\dados\BdCompreSuaFruta.sqlite");
+                if (File.Exists(@"c:\dados\BdCompreSuaFruta.sqlite") == false)
+                {
+                    SQLiteConnection.CreateFile(@"c:\dados\BdCompreSuaFruta.sqlite");
+                }
+                CriarTabelaSQlite();
             }
-            catch
+
+            catch(Exception ex)
             {
-                throw;
+                throw ex;
             }
         }
-        public void CriarTabelaSQlite()
+        private void CriarTabelaSQlite()
         {
             try
             {
@@ -45,9 +51,9 @@ namespace CompreSuaFruta.Dal
                     cmd.ExecuteNonQuery();
                     cmd.CommandText = "DELETE FROM StatusVenda";
                     cmd.ExecuteNonQuery();
-                    cmd.CommandText = "INSERT INTO StatusVenda(id, Nome) values (1, Finalizada)";
+                    cmd.CommandText = "INSERT INTO StatusVenda(id, Nome) values (1, 'Finalizada')";
                     cmd.ExecuteNonQuery();
-                    cmd.CommandText = "INSERT INTO StatusVenda(id, Nome) values (2, Em Andamento)";
+                    cmd.CommandText = "INSERT INTO StatusVenda(id, Nome) values (2, 'Em Andamento')";
                     cmd.ExecuteNonQuery();
                 }
             }

@@ -18,6 +18,8 @@ using CompreSuaFruta.Dal.Concrete;
 using CompreSuaFruta.Dal.Interface;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using CompreSuaFruta.Dal;
+using CompreSuaFruta.Dal.Context.Contexts;
 
 namespace CompreSuaFruta.Api
 {
@@ -26,9 +28,12 @@ namespace CompreSuaFruta.Api
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            _dalHelper = new DalHelper();
+            _dalHelper.CriarBancoSQLite();
         }
 
         public IConfiguration Configuration { get; }
+        private readonly DalHelper _dalHelper;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -48,6 +53,15 @@ namespace CompreSuaFruta.Api
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+            
+            services.AddDbContext<ProdutoDbContext>(o =>
+                    o.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<StatusVendaDbContext>(o =>
+                    o.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<UsuarioDbContext>(o =>
+                    o.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<VendaDbContext>(o =>
+                    o.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<IProdutoCarrinhoDal, ProdutoCarrinhoDal>();
             services.AddScoped<IProdutoDal, ProdutoDal>();

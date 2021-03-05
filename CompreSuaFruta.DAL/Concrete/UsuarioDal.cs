@@ -94,15 +94,14 @@ namespace CompreSuaFruta.Dal.Concrete
                 var conexao = _dbContext.DbConnection();
                 using (var cmd = conexao.CreateCommand())
                 {
-                    cmd.CommandText = "INSERT INTO Usuario(Id, Nome, Cpf, Senha, UsuarioAtivo) values (@Id, @Nome, @Cpf, @Senha, @UsuarioAtivo)";
-                    cmd.Parameters.AddWithValue("@Nome", dadosUsuario.Nome);
-                    cmd.Parameters.AddWithValue("@Cpf", dadosUsuario.Cpf);
-                    cmd.Parameters.AddWithValue("@Senha", dadosUsuario.Senha);
-                    cmd.Parameters.AddWithValue("@UsuarioAtivo", dadosUsuario.UsuarioAtivo);
-                    cmd.Parameters.AddWithValue("@Id", dadosUsuario.Id);
+                    cmd.CommandText = "INSERT INTO Usuario(Id, Nome, Cpf, Senha, UsuarioAtivo) values" +
+                        " ( " + dadosUsuario.Id + ", '" + dadosUsuario.Nome + "','"+ dadosUsuario.Cpf + 
+                        "', '" + dadosUsuario.Senha + "', " + dadosUsuario.UsuarioAtivo + ")";
                     da = new SQLiteDataAdapter(cmd.CommandText, _dbContext.DbConnection());
                     da.Fill(dt);
-                    Usuario Usuario = JsonConvert.DeserializeObject<Usuario>(JsonConvert.SerializeObject(dt));
+                    var jsonTeste = JsonConvert.SerializeObject(dt.Rows);
+                    var teste = BuscarUsuarioCpf(dadosUsuario.Cpf);
+                    Usuario Usuario = JsonConvert.DeserializeObject<Usuario>(jsonTeste);
                     return Usuario;
                 }
             }
@@ -170,12 +169,11 @@ namespace CompreSuaFruta.Dal.Concrete
                 var conexao = _dbContext.DbConnection();
                 using (var cmd = conexao.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT * FROM Usuario Where Cpf = @Cpf ";
-                    cmd.Parameters.AddWithValue("@Cpf", cpf);
+                    cmd.CommandText = "SELECT * FROM Usuario Where Cpf = " + cpf;
                     da = new SQLiteDataAdapter(cmd.CommandText, _dbContext.DbConnection());
+                    da.Fill(dt);
                     if (dt != null && dt.Rows.Count > 0)
                     {
-                        da.Fill(dt);
                         Usuario Usuario = JsonConvert.DeserializeObject<Usuario>(JsonConvert.SerializeObject(dt));
                         return Usuario;
                     }

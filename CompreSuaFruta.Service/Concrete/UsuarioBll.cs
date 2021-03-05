@@ -57,7 +57,15 @@ namespace CompreSuaFruta.Business.Concrete
         {
             try
             {
-                int idUsuario = _usuarioDal.BuscarUsuarios().Select(c => c.Id).Max() + 1;
+                if (_usuarioDal.BuscarUsuarios().Count > 0)
+                {
+                    dadosUsuario.Id = _usuarioDal.BuscarUsuarios().Select(c => c.Id).Max() + 1;
+                }
+                else
+                {
+                    dadosUsuario.Id = 1;
+                }
+                dadosUsuario.UsuarioAtivo = true;
                 return _usuarioDal.InserirUsuario(dadosUsuario);
             }
             catch (Exception ex)
