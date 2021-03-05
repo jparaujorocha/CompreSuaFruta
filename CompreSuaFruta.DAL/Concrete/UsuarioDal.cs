@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace CompreSuaFruta.Dal.Concrete
 {
-    class UsuarioDal : IUsuarioDal
+    public class UsuarioDal : IUsuarioDal
     {
         private readonly DalHelper _dbContext = new DalHelper();
 

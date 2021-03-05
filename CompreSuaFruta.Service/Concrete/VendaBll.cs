@@ -8,7 +8,7 @@ using System.Text;
 
 namespace CompreSuaFruta.Business.Concrete
 {
-    class VendaBll : IVendaBll
+    public class VendaBll : IVendaBll
     {
         private readonly IVendaDal _vendaDal;
         private readonly IUsuarioDal _usuarioDal;

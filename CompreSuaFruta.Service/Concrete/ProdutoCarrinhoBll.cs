@@ -8,7 +8,7 @@ using System.Text;
 
 namespace CompreSuaFruta.Business.Concrete
 {
-    class ProdutoCarrinhoBll : IProdutoCarrinhoBll
+    public class ProdutoCarrinhoBll : IProdutoCarrinhoBll
     {
         private readonly IProdutoCarrinhoDal _produtoCarrinhoDal;
 

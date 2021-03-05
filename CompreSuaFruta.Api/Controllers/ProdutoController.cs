@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
-namespace CompreSuaProduto.Api.Controllers
+namespace CompreSuaFruta.Api.Controllers
 {
     [Route("api/produtos")]
     [ApiController]

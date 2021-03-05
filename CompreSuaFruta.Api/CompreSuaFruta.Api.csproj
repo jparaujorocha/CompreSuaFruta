@@ -2,24 +2,29 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <UserSecretsId>aspnet-CompreSuaFruta.Api-5522D679-D980-42FA-9DBA-33006F9EB9D8</UserSecretsId>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="5.0.3" />
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="5.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.14" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.14" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="2.1.14" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.9" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.113.7" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CompreSuaFruta.DAL\CompreSuaFruta.Dal.csproj" />
+    <ProjectReference Include="..\CompreSuaFruta.MODEL\CompreSuaFruta.Model.csproj" />
     <ProjectReference Include="..\CompreSuaFruta.Service\CompreSuaFruta.Business.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Identity\Services\" />
   </ItemGroup>
 
 </Project>
