@@ -39,7 +39,7 @@ namespace CompreSuaFruta.Api.Controllers
                 }
                 else
                 {
-                    return Ok("Nenhum dado encontrado");
+                    return Ok("Nenhum dado encontrado"); 
                 }
             }
             catch (Exception ex)

@@ -6,18 +6,18 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
-namespace CompreSuaFruta.Api.Controllers
+namespace CompreSuaProduto.Api.Controllers
 {
-    [Route("api/frutas")]
+    [Route("api/produtos")]
     [ApiController]
-    public class FrutasController : ControllerBase
+    public class ProdutoController : ControllerBase
     {
         /*
-        public IFrutasService _FrutasService;
+        public IProdutosService _ProdutosService;
 
-        public FrutasController(IFrutasService frutasService)
+        public ProdutosController(IProdutosService ProdutosService)
         {
-            this._FrutasService = frutasService;
+            this._ProdutosService = ProdutosService;
         }
 
         /// <summary>
@@ -28,14 +28,14 @@ namespace CompreSuaFruta.Api.Controllers
         [HttpGet]
         [Route("estoque")]
         [ProducesResponseType(typeof(string), 400)]
-        public IActionResult BuscaEstoqueFrutas()
+        public IActionResult BuscaEstoqueProdutos()
         {
             try
             {
-                var estoqueFrutas = JsonConvert.SerializeObject(_FrutasService.BuscarDadosMensais());
-                if (estoqueFrutas != null && estoqueFrutas.Length > 0)
+                var estoqueProdutos = JsonConvert.SerializeObject(_ProdutosService.BuscarDadosMensais());
+                if (estoqueProdutos != null && estoqueProdutos.Length > 0)
                 {
-                    return Ok(JsonConvert.SerializeObject(estoqueFrutas));
+                    return Ok(JsonConvert.SerializeObject(estoqueProdutos));
 
                 }
                 else
@@ -50,21 +50,21 @@ namespace CompreSuaFruta.Api.Controllers
         }
 
         /// <summary>
-        /// Remove frutas do estoque atual
+        /// Remove Produtos do estoque atual
         /// </summary>
         /// <returns></returns>
         // GET api/values
         [HttpGet]
         [Route("estoque")]
         [ProducesResponseType(typeof(string), 400)]
-        public IActionResult RemoveFrutasEstoque()
+        public IActionResult RemoveProdutosEstoque()
         {
             try
             {
-                var estoqueFrutas = JsonConvert.SerializeObject(_FrutasService.BuscarDadosMensais());
-                if (estoqueFrutas != null && estoqueFrutas.Length > 0)
+                var estoqueProdutos = JsonConvert.SerializeObject(_ProdutosService.BuscarDadosMensais());
+                if (estoqueProdutos != null && estoqueProdutos.Length > 0)
                 {
-                    return Ok(JsonConvert.SerializeObject(estoqueFrutas));
+                    return Ok(JsonConvert.SerializeObject(estoqueProdutos));
 
                 }
                 else
@@ -78,21 +78,21 @@ namespace CompreSuaFruta.Api.Controllers
             }
         }
         /// <summary>
-        /// Adiciona frutas ao estoque atual.
+        /// Adiciona Produtos ao estoque atual.
         /// </summary>
         /// <returns></returns>
         // GET api/values
         [HttpGet]
         [Route("estoque")]
         [ProducesResponseType(typeof(string), 400)]
-        public IActionResult AdicionaFrutasEstoque()
+        public IActionResult AdicionaProdutosEstoque()
         {
             try
             {
-                var estoqueFrutas = JsonConvert.SerializeObject(_FrutasService.BuscarDadosMensais());
-                if (estoqueFrutas != null && estoqueFrutas.Length > 0)
+                var estoqueProdutos = JsonConvert.SerializeObject(_ProdutosService.BuscarDadosMensais());
+                if (estoqueProdutos != null && estoqueProdutos.Length > 0)
                 {
-                    return Ok(JsonConvert.SerializeObject(estoqueFrutas));
+                    return Ok(JsonConvert.SerializeObject(estoqueProdutos));
 
                 }
                 else
