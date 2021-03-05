@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.1259
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompreSuaFruta.Api", "CompreSuaFruta\CompreSuaFruta.Api.csproj", "{9BBE28FD-4B63-4AE3-8937-8BF0498B50EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CompreSuaFruta.Api", "CompreSuaFruta\CompreSuaFruta.Api.csproj", "{9BBE28FD-4B63-4AE3-8937-8BF0498B50EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompreSuaFruta.Dal", "CompreSuaFruta.DAL\CompreSuaFruta.Dal.csproj", "{0E21B431-DA9E-4743-82FD-A7C70B3AD326}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CompreSuaFruta.Dal", "CompreSuaFruta.DAL\CompreSuaFruta.Dal.csproj", "{0E21B431-DA9E-4743-82FD-A7C70B3AD326}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompreSuaFruta.Model", "CompreSuaFruta.MODEL\CompreSuaFruta.Model.csproj", "{3FA6057C-EDA7-448D-A35C-C3A2E0F74B1D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CompreSuaFruta.Model", "CompreSuaFruta.MODEL\CompreSuaFruta.Model.csproj", "{3FA6057C-EDA7-448D-A35C-C3A2E0F74B1D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompreSuaFruta.Service", "CompreSuaFruta.Service\CompreSuaFruta.Service.csproj", "{D5549C1B-C7C4-4405-A18A-3D6A65C25AC7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CompreSuaFruta.Business", "CompreSuaFruta.Service\CompreSuaFruta.Business.csproj", "{D5549C1B-C7C4-4405-A18A-3D6A65C25AC7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

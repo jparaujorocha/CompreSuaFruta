@@ -1,19 +1,17 @@
-﻿using System;
+﻿using CompreSuaFruta.Model.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using CompreSuaFruta.Model.Models;
 
-namespace CompreSuaFruta.Dal.Interface
+namespace CompreSuaFruta.Business.Interface
 {
-    public interface IUsuarioDal
+    public interface IUsuarioBll
     {
         Usuario BuscarUsuarioId(int id);
         Usuario BuscarUsuarioCpfSenha(string cpf, string senha);
-        Usuario BuscarUsuarioCpf(string cpf);
         List<Usuario> BuscarUsuarios();
         Usuario InserirUsuario(Usuario dadosUsuario);
         Usuario AtualizarUsuario(Usuario dadosUsuario);
-        void DesativarUsuario(Usuario dadosUsuario);
-
+        void DesativarUsuario(int id);
     }
 }

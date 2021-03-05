@@ -11,8 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTO\Response\" />
-    <Folder Include="DTO\Request\" />
+    <ProjectReference Include="..\CompreSuaFruta.DAL\CompreSuaFruta.Dal.csproj" />
   </ItemGroup>
 
 </Project>

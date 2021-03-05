@@ -17,4 +17,9 @@
     <PackageReference Include="System.Data.SQLite" Version="1.0.113.7" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CompreSuaFruta.DAL\CompreSuaFruta.Dal.csproj" />
+    <ProjectReference Include="..\CompreSuaFruta.Service\CompreSuaFruta.Business.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -86,6 +86,52 @@ namespace CompreSuaFruta.Dal.Concrete
             }
         }
 
+        public List<Venda> BuscarVendasUsuario(int idUsuario)
+        {
+            SQLiteDataAdapter da = null;
+            DataTable dt = new DataTable();
+            try
+            {
+                var conexao = _dbContext.DbConnection();
+                using (var cmd = conexao.CreateCommand())
+                {
+                    cmd.CommandText = "SELECT * FROM Venda where IdUsuario = @IdUsuario";
+                    cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
+                    da = new SQLiteDataAdapter(cmd.CommandText, _dbContext.DbConnection());
+                    da.Fill(dt);
+                    List<Venda> listaVendas = JsonConvert.DeserializeObject<List<Venda>>(JsonConvert.SerializeObject(dt));
+                    return listaVendas;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public List<Venda> BuscarVendasPendenteUsuario(int idUsuario)
+        {
+            SQLiteDataAdapter da = null;
+            DataTable dt = new DataTable();
+            try
+            {
+                var conexao = _dbContext.DbConnection();
+                using (var cmd = conexao.CreateCommand())
+                {
+                    cmd.CommandText = "SELECT * FROM Venda where IdUsuario = @IdUsuario, IdStatus = 2";
+                    cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
+                    da = new SQLiteDataAdapter(cmd.CommandText, _dbContext.DbConnection());
+                    da.Fill(dt);
+                    List<Venda> listaVendas = JsonConvert.DeserializeObject<List<Venda>>(JsonConvert.SerializeObject(dt));
+                    return listaVendas;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public Venda InserirVenda(Venda dadosVenda)
         {
             SQLiteDataAdapter da = null;

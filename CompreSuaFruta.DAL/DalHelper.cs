@@ -37,7 +37,9 @@ namespace CompreSuaFruta.Dal
                     cmd.ExecuteNonQuery();
                     cmd.CommandText = "CREATE TABLE IF NOT EXISTS Usuario(Id int, Nome Varchar(50), Cpf VarChar(20), Senha Varchar(50), UsuarioAtivo Boolean)";
                     cmd.ExecuteNonQuery();
-                    cmd.CommandText = "CREATE TABLE IF NOT EXISTS Venda(Id int, Data Varchar(50), Valor Double, IdUsuario int, Status int, VendaAtiva Boolean)";
+                    cmd.CommandText = "CREATE TABLE IF NOT EXISTS Venda(Id int, Data DateTime, Valor Double, IdUsuario int, IdStatus int, VendaAtiva Boolean)";
+                    cmd.ExecuteNonQuery();
+                    cmd.CommandText = "CREATE TABLE IF NOT EXISTS ProdutoCarrinho(Id int, IdProduto int, IdVenda int)";
                     cmd.ExecuteNonQuery();
                     cmd.CommandText = "CREATE TABLE IF NOT EXISTS StatusVenda(Id int, Nome VarChar(20))";
                     cmd.ExecuteNonQuery();

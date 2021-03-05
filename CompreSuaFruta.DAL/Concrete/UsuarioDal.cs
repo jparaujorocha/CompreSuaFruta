@@ -140,8 +140,38 @@ namespace CompreSuaFruta.Dal.Concrete
                 using (var cmd = conexao.CreateCommand())
                 {
                     cmd.CommandText = "SELECT * FROM Usuario Where Cpf = @Cpf AND Senha = @Senha ";
-                    cmd.Parameters.AddWithValue("@Cpf", dadosUsuario.Cpf);
-                    cmd.Parameters.AddWithValue("@Senha", dadosUsuario.Senha);
+                    cmd.Parameters.AddWithValue("@Cpf", cpf);
+                    cmd.Parameters.AddWithValue("@Senha", senha);
+                    da = new SQLiteDataAdapter(cmd.CommandText, _dbContext.DbConnection());
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        da.Fill(dt);
+                        Usuario Usuario = JsonConvert.DeserializeObject<Usuario>(JsonConvert.SerializeObject(dt));
+                        return Usuario;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public Usuario BuscarUsuarioCpf(string cpf)
+        {
+            SQLiteDataAdapter da = null;
+            DataTable dt = new DataTable();
+            try
+            {
+                var conexao = _dbContext.DbConnection();
+                using (var cmd = conexao.CreateCommand())
+                {
+                    cmd.CommandText = "SELECT * FROM Usuario Where Cpf = @Cpf ";
+                    cmd.Parameters.AddWithValue("@Cpf", cpf);
                     da = new SQLiteDataAdapter(cmd.CommandText, _dbContext.DbConnection());
                     if (dt != null && dt.Rows.Count > 0)
                     {

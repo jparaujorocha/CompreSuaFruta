@@ -3,42 +3,40 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CompreSuaFruta.Business.Interface;
-using CompreSuaFruta.Dal.Interface;
 using CompreSuaFruta.Model.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
-namespace CompreSuaProduto.Api.Controllers
+namespace CompreSuaFruta.Api.Controllers
 {
-    [Route("api/produtos")]
+    [Route("api/vendas")]
     [ApiController]
-    public class ProdutoController : ControllerBase
+    public class VendaController : ControllerBase
     {
-        public IProdutoBll _produtoBll;
+        public IVendaBll _vendaBll;
 
-        public ProdutoController(IProdutoBll produtoBll)
+        public VendaController(IVendaBll vendaBll)
         {
-            this._produtoBll = produtoBll;
+            this._vendaBll = vendaBll;
         }
 
         /// <summary>
-        /// Busca o estoque atual de produtos
+        /// Busca o estoque atual de Vendas
         /// </summary>
         /// <returns></returns>
         // GET api/values
         [HttpPost]
-        //[Route("produtos")]
         [ProducesResponseType(typeof(string), 400)]
-        [ProducesResponseType(typeof(List<Produto>), 200)]
-        public IActionResult BuscaProdutos()
+        [ProducesResponseType(typeof(List<Venda>), 200)]
+        public IActionResult BuscaVendas()
         {
             try
             {
-                var listaProdutos = JsonConvert.SerializeObject(_produtoBll.BuscarProdutos());
-                if (listaProdutos != null && listaProdutos.Length > 0)
+                var listaVendas = JsonConvert.SerializeObject(_vendaBll.BuscarVendas());
+                if (listaVendas != null && listaVendas.Length > 0)
                 {
-                    return Ok(JsonConvert.SerializeObject(listaProdutos));
+                    return Ok(JsonConvert.SerializeObject(listaVendas));
 
                 }
                 else
@@ -52,22 +50,22 @@ namespace CompreSuaProduto.Api.Controllers
             }
         }
         /// <summary>
-        /// Busca o estoque atual de produtos
+        /// Busca o estoque atual de Vendas
         /// </summary>
         /// <returns></returns>
         // GET api/values
         [HttpGet]
         [Route("{id}")]
         [ProducesResponseType(typeof(string), 400)]
-        [ProducesResponseType(typeof(Produto), 400)]
-        public IActionResult BuscaProduto(int id)
+        [ProducesResponseType(typeof(Venda), 400)]
+        public IActionResult BuscaVenda(int id)
         {
             try
             {
-                var produto = JsonConvert.SerializeObject(_produtoBll.BuscarProdutoId(id));
-                if (produto != null && produto.Length > 0)
+                var Venda = JsonConvert.SerializeObject(_vendaBll.BuscarVendaId(id));
+                if (Venda != null && Venda.Length > 0)
                 {
-                    return Ok(JsonConvert.SerializeObject(produto));
+                    return Ok(JsonConvert.SerializeObject(Venda));
 
                 }
                 else
@@ -82,7 +80,7 @@ namespace CompreSuaProduto.Api.Controllers
         }
 
         /// <summary>
-        /// Remove Produtos do estoque atual
+        /// Remove Vendas do estoque atual
         /// </summary>
         /// <returns></returns>
         // GET api/values
@@ -90,15 +88,13 @@ namespace CompreSuaProduto.Api.Controllers
         [Route("desativar/{id}")]
         [ProducesResponseType(typeof(string), 400)]
         [ProducesResponseType(typeof(string), 200)]
-        public IActionResult DesativarProduto(int id)
+        public IActionResult DesativarVenda(int id)
         {
             try
             {
-                _produtoBll.DesativarProduto(id);
+                _vendaBll.DesativarVenda(id);
 
-                return Ok("Produto Desativado com sucesso.");
-
-
+                return Ok("Venda Desativado com sucesso.");
             }
             catch (Exception ex)
             {
@@ -107,22 +103,22 @@ namespace CompreSuaProduto.Api.Controllers
         }
 
         /// <summary>
-        /// Adiciona Produtos ao estoque atual.
+        /// Adiciona Vendas ao estoque atual.
         /// </summary>
         /// <returns></returns>
         // GET api/values
         [HttpPost]
-        [Route("adicionarproduto")]
+        [Route("adicionarvenda")]
         [ProducesResponseType(typeof(string), 400)]
-        [ProducesResponseType(typeof(Produto), 200)]
-        public IActionResult AdicionaProduto([FromBody] Produto dadosProduto)
+        [ProducesResponseType(typeof(Venda), 200)]
+        public IActionResult AdicionaVenda([FromBody] Venda dadosVenda)
         {
             try
             {
-                var estoqueProdutos = JsonConvert.SerializeObject(_produtoBll.InserirProduto(dadosProduto));
-                if (estoqueProdutos != null && estoqueProdutos.Length > 0)
+                var estoqueVendas = JsonConvert.SerializeObject(_vendaBll.InserirVenda(dadosVenda));
+                if (estoqueVendas != null && estoqueVendas.Length > 0)
                 {
-                    return Ok(JsonConvert.SerializeObject(estoqueProdutos));
+                    return Ok(JsonConvert.SerializeObject(estoqueVendas));
 
                 }
                 else
@@ -137,22 +133,22 @@ namespace CompreSuaProduto.Api.Controllers
         }
 
         /// <summary>
-        /// Adiciona Produtos ao estoque atual.
+        /// Adiciona Vendas ao estoque atual.
         /// </summary>
         /// <returns></returns>
         // GET api/values
         [HttpGet]
-        [Route("atualizarproduto")]
+        [Route("atualizarvenda")]
         [ProducesResponseType(typeof(string), 400)]
-        [ProducesResponseType(typeof(Produto), 200)]
-        public IActionResult AtualizarProduto([FromBody] Produto dadosProduto)
+        [ProducesResponseType(typeof(Venda), 200)]
+        public IActionResult AtualizarVenda([FromBody] Venda dadosVenda)
         {
             try
             {
-                var estoqueProdutos = JsonConvert.SerializeObject(_produtoBll.InserirProduto(dadosProduto));
-                if (estoqueProdutos != null && estoqueProdutos.Length > 0)
+                var estoqueVendas = JsonConvert.SerializeObject(_vendaBll.InserirVenda(dadosVenda));
+                if (estoqueVendas != null && estoqueVendas.Length > 0)
                 {
-                    return Ok(JsonConvert.SerializeObject(estoqueProdutos));
+                    return Ok(JsonConvert.SerializeObject(estoqueVendas));
 
                 }
                 else
@@ -165,6 +161,5 @@ namespace CompreSuaProduto.Api.Controllers
                 return BadRequest("Erro: " + ex.Message);
             }
         }
-
     }
 }
