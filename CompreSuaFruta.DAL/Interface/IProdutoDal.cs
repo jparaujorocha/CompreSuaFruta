@@ -5,7 +5,7 @@ using CompreSuaFruta.Model.Models;
 
 namespace CompreSuaFruta.Dal.Interface
 {
-    public interface IProdutoDal
+    public interface IProdutoDal : IDisposable
     {
         Produto BuscarProdutoId(int id);
         List<Produto> BuscarProdutos();

@@ -15,7 +15,7 @@ namespace CompreSuaFruta.Dal.Migrations.UsuarioDb
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.1.14-servicing-32113");
 
-            modelBuilder.Entity("CompreSuaFruta.Dal.Context.Entities.Usuario", b =>
+            modelBuilder.Entity("CompreSuaFruta.Model.Models.Usuario", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -30,7 +30,7 @@ namespace CompreSuaFruta.Dal.Migrations.UsuarioDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("Usuarios");
+                    b.ToTable("Usuario");
                 });
 #pragma warning restore 612, 618
         }

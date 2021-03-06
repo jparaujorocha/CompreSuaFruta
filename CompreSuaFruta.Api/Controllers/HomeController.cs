@@ -5,14 +5,27 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using CompreSuaFruta.Api.Models;
+using CompreSuaFruta.Business.Interface;
 
 namespace CompreSuaFruta.Api.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IProdutoBll _produtoBll;
+        public HomeController(IProdutoBll produtoBll)
+        {
+            this._produtoBll = produtoBll;
+        }
         public IActionResult Index()
         {
-            return View();
+            try
+            {
+                return View(_produtoBll.BuscarProdutos());
+            }
+            catch (Exception ex)
+            {
+                return View("Erro: " + ex.Message);
+            }
         }
 
         public IActionResult About()

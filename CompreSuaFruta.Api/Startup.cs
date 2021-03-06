@@ -62,13 +62,15 @@ namespace CompreSuaFruta.Api
                     o.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDbContext<VendaDbContext>(o =>
                     o.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ProdutoVendaDbContext>(o =>
+                    o.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddScoped<IProdutoCarrinhoDal, ProdutoCarrinhoDal>();
+            services.AddScoped<IProdutoVendaDal, ProdutoVendaDal>();
             services.AddScoped<IProdutoDal, ProdutoDal>();
             services.AddScoped<IUsuarioDal, UsuarioDal>();
             services.AddScoped<IVendaDal, VendaDal>();
             services.AddScoped<IProdutoBll, ProdutoBll>();
-            services.AddScoped<IProdutoCarrinhoBll, ProdutoCarrinhoBll>();
+            services.AddScoped<IProdutoVendaBll, ProdutoVendaBll>();
             services.AddScoped<IUsuarioBll, UsuarioBll>();
             services.AddScoped<IVendaBll, VendaBll>();
         }

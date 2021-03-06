@@ -45,7 +45,8 @@ namespace CompreSuaFruta.Business.Concrete
         {
             try
             {
-                return _produtoDal.BuscarProdutos();
+                var produtos = _produtoDal.BuscarProdutos();
+                return produtos;
             }
             catch (Exception ex)
             {

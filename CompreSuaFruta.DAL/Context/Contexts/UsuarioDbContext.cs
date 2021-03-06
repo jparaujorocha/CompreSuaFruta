@@ -1,4 +1,4 @@
-﻿using CompreSuaFruta.Dal.Context.Entities;
+﻿using CompreSuaFruta.Model.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ namespace CompreSuaFruta.Dal.Context.Contexts
 {
     public class UsuarioDbContext : DbContext
     {
-        public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<Usuario> Usuario { get; set; }
 
         public UsuarioDbContext(DbContextOptions<UsuarioDbContext> options) : base(options)
         { }

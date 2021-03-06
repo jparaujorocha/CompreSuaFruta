@@ -1,0 +1,38 @@
+﻿@model CompreSuaFruta.Model.Models.Produto
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Model.Nome</h2>
+
+<div class="bg-gradient-gray" style="max-width: 1200px; margin: 0 auto;">
+    <div class="row">
+        <div class="col-md-4" style="align-items:center; text-align:center; align-content:center">
+            <img src="@Url.Content(Model.CaminhoImagem)" alt=@Model.Nome style="width: 500px; align-items:baseline" class="img-responsive">
+
+            <div class="clearfix visible-xs"></div>
+            <div class="media-body">
+
+                <div class="col-md-pull-4 margintop10 marginbottom10 hidden-xs">
+
+                    <h4 class="media-heading">@Model.Descricao</h4>
+                    <div class="text-danger font-weight-bold h2">@string.Format("R$ {0:N2}", Model.Valor)</div>
+
+                    <a class="btn btn-default" href="@Url.Action("Index", "Home")">
+
+                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                        <span class="sr-only">Voltar</span>
+                    </a>
+                    <a class="btn btn-default" href="@Url.Action("Adicionar", "Carrinho", new { id = Model.Id })">
+
+                        <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
+                        <span class="sr-only">Adicionar ao carrinho</span>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

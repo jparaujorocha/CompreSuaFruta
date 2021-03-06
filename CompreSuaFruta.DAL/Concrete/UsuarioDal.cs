@@ -4,36 +4,36 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Text;
-using CompreSuaFruta.Model.Models;
 using System.Linq;
 using Newtonsoft.Json;
+using CompreSuaFruta.Dal.Context.Contexts;
+using Microsoft.EntityFrameworkCore;
+using CompreSuaFruta.Model.Models;
 
 namespace CompreSuaFruta.Dal.Concrete
 {
     public class UsuarioDal : IUsuarioDal
     {
-        private readonly DalHelper _dbContext = new DalHelper();
+        private readonly UsuarioDbContext _dbContext;
+        private bool _disposed;
 
+        public UsuarioDal(UsuarioDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
         public Usuario AtualizarUsuario(Usuario dadosUsuario)
         {
-            SQLiteDataAdapter da = null;
-            DataTable dt = new DataTable();
             try
             {
-                var conexao = _dbContext.DbConnection();
-                using (var cmd = conexao.CreateCommand())
+                var localEntity = _dbContext.Set<Usuario>().Local.FirstOrDefault(f => f.Id == dadosUsuario.Id);
+                if (localEntity != null)
                 {
-                    cmd.CommandText = "UPDATE Usuario set Nome = @Nome, Cpf = @Cpf, Senha = @Senha, UsuarioAtivo = @UsuarioAtivo WHERE Id = @Id";
-                    cmd.Parameters.AddWithValue("@Nome", dadosUsuario.Nome);
-                    cmd.Parameters.AddWithValue("@Cpf", dadosUsuario.Cpf);
-                    cmd.Parameters.AddWithValue("@Senha", dadosUsuario.Senha);
-                    cmd.Parameters.AddWithValue("@UsuarioAtivo", dadosUsuario.UsuarioAtivo);
-                    cmd.Parameters.AddWithValue("@Id", dadosUsuario.Id);
-                    da = new SQLiteDataAdapter(cmd.CommandText, _dbContext.DbConnection());
-                    da.Fill(dt);
-                    Usuario Usuario = JsonConvert.DeserializeObject<Usuario>(JsonConvert.SerializeObject(dt));
-                    return Usuario;
+                    _dbContext.Entry(localEntity).State = EntityState.Detached;
                 }
+                _dbContext.Usuario.Attach(dadosUsuario);
+                _dbContext.Entry(dadosUsuario).State = EntityState.Modified;
+                _dbContext.SaveChanges();
+                return dadosUsuario;
             }
             catch (Exception ex)
             {
@@ -43,19 +43,9 @@ namespace CompreSuaFruta.Dal.Concrete
 
         public Usuario BuscarUsuarioId(int id)
         {
-            SQLiteDataAdapter da = null;
-            DataTable dt = new DataTable();
             try
             {
-                var conexao = _dbContext.DbConnection();
-                using (var cmd = conexao.CreateCommand())
-                {
-                    cmd.CommandText = "SELECT * FROM Usuario Where Id= " + id;
-                    da = new SQLiteDataAdapter(cmd.CommandText, _dbContext.DbConnection());
-                    da.Fill(dt);
-                    Usuario Usuario = JsonConvert.DeserializeObject<Usuario>(JsonConvert.SerializeObject(dt));
-                    return Usuario;
-                }
+                return (from dados in _dbContext.Usuario where dados.Id == id select dados).FirstOrDefault();
             }
             catch (Exception ex)
             {
@@ -65,19 +55,9 @@ namespace CompreSuaFruta.Dal.Concrete
 
         public List<Usuario> BuscarUsuarios()
         {
-            SQLiteDataAdapter da = null;
-            DataTable dt = new DataTable();
             try
             {
-                var conexao = _dbContext.DbConnection();
-                using (var cmd = conexao.CreateCommand())
-                {
-                    cmd.CommandText = "SELECT * FROM Usuario";
-                    da = new SQLiteDataAdapter(cmd.CommandText, _dbContext.DbConnection());
-                    da.Fill(dt);
-                    List<Usuario> listaUsuarios = JsonConvert.DeserializeObject<List<Usuario>>(JsonConvert.SerializeObject(dt));
-                    return listaUsuarios;
-                }
+                return (from dados in _dbContext.Usuario select dados).ToList();
             }
             catch (Exception ex)
             {
@@ -87,23 +67,13 @@ namespace CompreSuaFruta.Dal.Concrete
 
         public Usuario InserirUsuario(Usuario dadosUsuario)
         {
-            SQLiteDataAdapter da = null;
-            DataTable dt = new DataTable();
             try
             {
-                var conexao = _dbContext.DbConnection();
-                using (var cmd = conexao.CreateCommand())
-                {
-                    cmd.CommandText = "INSERT INTO Usuario(Id, Nome, Cpf, Senha, UsuarioAtivo) values" +
-                        " ( " + dadosUsuario.Id + ", '" + dadosUsuario.Nome + "','"+ dadosUsuario.Cpf + 
-                        "', '" + dadosUsuario.Senha + "', " + dadosUsuario.UsuarioAtivo + ")";
-                    da = new SQLiteDataAdapter(cmd.CommandText, _dbContext.DbConnection());
-                    da.Fill(dt);
-                    var jsonTeste = JsonConvert.SerializeObject(dt.Rows);
-                    var teste = BuscarUsuarioCpf(dadosUsuario.Cpf);
-                    Usuario Usuario = JsonConvert.DeserializeObject<Usuario>(jsonTeste);
-                    return Usuario;
-                }
+
+                _dbContext.Usuario.Add(dadosUsuario);
+                _dbContext.SaveChanges();
+
+                return dadosUsuario;
             }
             catch (Exception ex)
             {
@@ -115,13 +85,10 @@ namespace CompreSuaFruta.Dal.Concrete
         {
             try
             {
-                var conexao = _dbContext.DbConnection();
-                using (var cmd = conexao.CreateCommand())
-                {
-                    cmd.CommandText = "UPDATE Usuario set UsuarioAtivo = 0 WHERE Id = @Id";
-                    cmd.Parameters.AddWithValue("@Id", dadosUsuario.Id);
-                    cmd.ExecuteNonQuery();
-                }
+                dadosUsuario.UsuarioAtivo = false;
+                _dbContext.Usuario.Attach(dadosUsuario);
+                _dbContext.Entry(dadosUsuario).State = EntityState.Modified;
+                _dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -131,28 +98,9 @@ namespace CompreSuaFruta.Dal.Concrete
 
         public Usuario BuscarUsuarioCpfSenha(string cpf, string senha)
         {
-            SQLiteDataAdapter da = null;
-            DataTable dt = new DataTable();
             try
             {
-                var conexao = _dbContext.DbConnection();
-                using (var cmd = conexao.CreateCommand())
-                {
-                    cmd.CommandText = "SELECT * FROM Usuario Where Cpf = @Cpf AND Senha = @Senha ";
-                    cmd.Parameters.AddWithValue("@Cpf", cpf);
-                    cmd.Parameters.AddWithValue("@Senha", senha);
-                    da = new SQLiteDataAdapter(cmd.CommandText, _dbContext.DbConnection());
-                    if (dt != null && dt.Rows.Count > 0)
-                    {
-                        da.Fill(dt);
-                        Usuario Usuario = JsonConvert.DeserializeObject<Usuario>(JsonConvert.SerializeObject(dt));
-                        return Usuario;
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                }
+                return (from dados in _dbContext.Usuario where dados.Cpf == cpf && dados.Senha == senha select dados).FirstOrDefault();
             }
             catch (Exception ex)
             {
@@ -162,31 +110,32 @@ namespace CompreSuaFruta.Dal.Concrete
 
         public Usuario BuscarUsuarioCpf(string cpf)
         {
-            SQLiteDataAdapter da = null;
-            DataTable dt = new DataTable();
             try
             {
-                var conexao = _dbContext.DbConnection();
-                using (var cmd = conexao.CreateCommand())
-                {
-                    cmd.CommandText = "SELECT * FROM Usuario Where Cpf = " + cpf;
-                    da = new SQLiteDataAdapter(cmd.CommandText, _dbContext.DbConnection());
-                    da.Fill(dt);
-                    if (dt != null && dt.Rows.Count > 0)
-                    {
-                        Usuario Usuario = JsonConvert.DeserializeObject<Usuario>(JsonConvert.SerializeObject(dt));
-                        return Usuario;
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                }
+                return (from dados in _dbContext.Usuario where dados.Cpf == cpf select dados).FirstOrDefault();
             }
             catch (Exception ex)
             {
                 throw ex;
             }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        public void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _dbContext.Dispose();
+                }
+            }
+            _disposed = true;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using CompreSuaFruta.Dal.Context.Entities;
+﻿using CompreSuaFruta.Model.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ namespace CompreSuaFruta.Dal.Context.Contexts
 {
     public class VendaDbContext : DbContext
     {
-        public DbSet<Venda> Vendas { get; set; }
+        public DbSet<Venda> Venda { get; set; }
 
         public VendaDbContext(DbContextOptions<VendaDbContext> options) : base(options)
         { }

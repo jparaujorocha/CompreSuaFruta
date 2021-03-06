@@ -2,169 +2,46 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CompreSuaFruta.Business.Interface;
-using CompreSuaFruta.Dal.Interface;
-using CompreSuaFruta.Model.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using CompreSuaFruta.Dal.Context.Contexts;
+using CompreSuaFruta.Model.Models;
+using CompreSuaFruta.Business.Interface;
 
 namespace CompreSuaFruta.Api.Controllers
 {
-    [Route("api/produtos")]
-    [ApiController]
-    public class ProdutoController : ControllerBase
+    public class ProdutoController : Controller
     {
-        public IProdutoBll _produtoBll;
+        private readonly IProdutoBll _produtoBll;
 
         public ProdutoController(IProdutoBll produtoBll)
         {
             this._produtoBll = produtoBll;
         }
 
-        /// <summary>
-        /// Busca o estoque atual de produtos
-        /// </summary>
-        /// <returns></returns>
-        // GET api/values
-        [HttpPost]
-        //[Route("produtos")]
-        [ProducesResponseType(typeof(string), 400)]
-        [ProducesResponseType(typeof(List<Produto>), 200)]
-        public IActionResult BuscaProdutos()
-        {
-            try
-            {
-                var listaProdutos = JsonConvert.SerializeObject(_produtoBll.BuscarProdutos());
-                if (listaProdutos != null && listaProdutos.Length > 0)
-                {
-                    return Ok(JsonConvert.SerializeObject(listaProdutos));
 
-                }
-                else
-                {
-                    return Ok("Nenhum dado encontrado");
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest("Erro: " + ex.Message);
-            }
-        }
-        /// <summary>
-        /// Busca o estoque atual de produtos
-        /// </summary>
-        /// <returns></returns>
-        // GET api/values
-        [HttpGet]
-        [Route("{id}")]
-        [ProducesResponseType(typeof(string), 400)]
-        [ProducesResponseType(typeof(Produto), 400)]
-        public IActionResult BuscaProduto(int id)
+        // GET: Produto
+        public IActionResult Index()
         {
-            try
-            {
-                var produto = JsonConvert.SerializeObject(_produtoBll.BuscarProdutoId(id));
-                if (produto != null && produto.Length > 0)
-                {
-                    return Ok(JsonConvert.SerializeObject(produto));
-
-                }
-                else
-                {
-                    return Ok("Nenhum dado encontrado");
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest("Erro: " + ex.Message);
-            }
+            return View(_produtoBll.BuscarProdutos());
         }
 
-        /// <summary>
-        /// Remove Produtos do estoque atual
-        /// </summary>
-        /// <returns></returns>
-        // GET api/values
-        [HttpGet]
-        [Route("desativar/{id}")]
-        [ProducesResponseType(typeof(string), 400)]
-        [ProducesResponseType(typeof(string), 200)]
-        public IActionResult DesativarProduto(int id)
+        // GET: Produto/Details/5
+        public IActionResult Detalhes(int? id)
         {
-            try
+            if (id == null)
             {
-                _produtoBll.DesativarProduto(id);
-
-                return Ok("Produto Desativado com sucesso.");
-
-
+                return NotFound();
             }
-            catch (Exception ex)
+
+            var produto = _produtoBll.BuscarProdutoId((int)id);
+            if (produto == null)
             {
-                return BadRequest("Erro: " + ex.Message);
+                return NotFound();
             }
+
+            return View(produto);
         }
-
-        /// <summary>
-        /// Adiciona Produtos ao estoque atual.
-        /// </summary>
-        /// <returns></returns>
-        // GET api/values
-        [HttpPost]
-        [Route("adicionarproduto")]
-        [ProducesResponseType(typeof(string), 400)]
-        [ProducesResponseType(typeof(Produto), 200)]
-        public IActionResult AdicionaProduto([FromBody] Produto dadosProduto)
-        {
-            try
-            {
-                var estoqueProdutos = JsonConvert.SerializeObject(_produtoBll.InserirProduto(dadosProduto));
-                if (estoqueProdutos != null && estoqueProdutos.Length > 0)
-                {
-                    return Ok(JsonConvert.SerializeObject(estoqueProdutos));
-
-                }
-                else
-                {
-                    return Ok("Nenhum dado encontrado");
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest("Erro: " + ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Adiciona Produtos ao estoque atual.
-        /// </summary>
-        /// <returns></returns>
-        // GET api/values
-        [HttpGet]
-        [Route("atualizarproduto")]
-        [ProducesResponseType(typeof(string), 400)]
-        [ProducesResponseType(typeof(Produto), 200)]
-        public IActionResult AtualizarProduto([FromBody] Produto dadosProduto)
-        {
-            try
-            {
-                var estoqueProdutos = JsonConvert.SerializeObject(_produtoBll.InserirProduto(dadosProduto));
-                if (estoqueProdutos != null && estoqueProdutos.Length > 0)
-                {
-                    return Ok(JsonConvert.SerializeObject(estoqueProdutos));
-
-                }
-                else
-                {
-                    return Ok("Nenhum dado encontrado");
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest("Erro: " + ex.Message);
-            }
-        }
-
     }
 }

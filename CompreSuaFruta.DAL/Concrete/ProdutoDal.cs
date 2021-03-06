@@ -7,34 +7,33 @@ using System.Text;
 using CompreSuaFruta.Model.Models;
 using System.Linq;
 using Newtonsoft.Json;
+using CompreSuaFruta.Dal.Context.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace CompreSuaFruta.Dal.Concrete
 {
     public class ProdutoDal : IProdutoDal
     {
-        private readonly DalHelper _dbContext = new DalHelper();
+        private readonly ProdutoDbContext _dbContext;
+        private bool _disposed;
 
+        public ProdutoDal(ProdutoDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
         public Produto AtualizarProduto(Produto dadosProduto)
         {
-            SQLiteDataAdapter da = null;
-            DataTable dt = new DataTable();
             try
             {
-                var conexao = _dbContext.DbConnection();
-                using (var cmd = conexao.CreateCommand())
+                var localEntity = _dbContext.Set<Produto>().Local.FirstOrDefault(f => f.Id == dadosProduto.Id);
+                if (localEntity != null)
                 {
-                    cmd.CommandText = "UPDATE Produto set Nome = @Nome, Descricao = @Descricao, QuantidadeDisponivel = @QuantidadeDisponivel, Valor = @Valor, ProdutoAtivo = @ProdutoAtivo WHERE Id = @Id";
-                    cmd.Parameters.AddWithValue("@Nome", dadosProduto.Nome);
-                    cmd.Parameters.AddWithValue("@Descricao", dadosProduto.Descricao);
-                    cmd.Parameters.AddWithValue("@QuantidadeDisponivel", dadosProduto.QuantidadeDisponivel);
-                    cmd.Parameters.AddWithValue("@Valor", dadosProduto.Valor);
-                    cmd.Parameters.AddWithValue("@ProdutoAtivo", dadosProduto.ProdutoAtivo);
-                    cmd.Parameters.AddWithValue("@Id", dadosProduto.Id);
-                    da = new SQLiteDataAdapter(cmd.CommandText, _dbContext.DbConnection());
-                    da.Fill(dt);
-                    Produto Produto = JsonConvert.DeserializeObject<Produto>(JsonConvert.SerializeObject(dt));
-                    return Produto;
+                    _dbContext.Entry(localEntity).State = EntityState.Detached;
                 }
+                _dbContext.Produto.Attach(dadosProduto);
+                _dbContext.Entry(dadosProduto).State = EntityState.Modified;
+                _dbContext.SaveChanges();
+                return dadosProduto;
             }
             catch (Exception ex)
             {
@@ -44,19 +43,9 @@ namespace CompreSuaFruta.Dal.Concrete
 
         public Produto BuscarProdutoId(int id)
         {
-            SQLiteDataAdapter da = null;
-            DataTable dt = new DataTable();
             try
             {
-                var conexao = _dbContext.DbConnection();
-                using (var cmd = conexao.CreateCommand())
-                {
-                    cmd.CommandText = "SELECT * FROM Produto Where Id= " + id;
-                    da = new SQLiteDataAdapter(cmd.CommandText, _dbContext.DbConnection());
-                    da.Fill(dt);
-                    Produto Produto = JsonConvert.DeserializeObject<Produto>(JsonConvert.SerializeObject(dt));
-                    return Produto;
-                }
+                return (from dados in _dbContext.Produto where dados.Id == id select dados).FirstOrDefault();
             }
             catch (Exception ex)
             {
@@ -66,19 +55,9 @@ namespace CompreSuaFruta.Dal.Concrete
 
         public List<Produto> BuscarProdutos()
         {
-            SQLiteDataAdapter da = null;
-            DataTable dt = new DataTable();
             try
             {
-                var conexao = _dbContext.DbConnection();
-                using (var cmd = conexao.CreateCommand())
-                {
-                    cmd.CommandText = "SELECT * FROM Produto";
-                    da = new SQLiteDataAdapter(cmd.CommandText, _dbContext.DbConnection());
-                    da.Fill(dt);
-                    List<Produto> listaProdutos = JsonConvert.DeserializeObject<List<Produto>>(JsonConvert.SerializeObject(dt));
-                    return listaProdutos;
-                }
+                return (from dados in _dbContext.Produto select dados).ToList();
             }
             catch (Exception ex)
             {
@@ -88,25 +67,13 @@ namespace CompreSuaFruta.Dal.Concrete
 
         public Produto InserirProduto(Produto dadosProduto)
         {
-            SQLiteDataAdapter da = null;
-            DataTable dt = new DataTable();
             try
             {
-                var conexao = _dbContext.DbConnection();
-                using (var cmd = conexao.CreateCommand())
-                {
-                    cmd.CommandText = "INSERT INTO Produto(Id, Nome, Descricao, QuantidadeDisponivel, Valor, ProdutoAtivo) values (@Id, @Nome, @Descricao, @QuantidadeDisponivel, @Valor, @ProdutoAtivo)";
-                    cmd.Parameters.AddWithValue("@Nome", dadosProduto.Nome);
-                    cmd.Parameters.AddWithValue("@Descricao", dadosProduto.Descricao);
-                    cmd.Parameters.AddWithValue("@QuantidadeDisponivel", dadosProduto.QuantidadeDisponivel);
-                    cmd.Parameters.AddWithValue("@Valor", dadosProduto.Valor);
-                    cmd.Parameters.AddWithValue("@ProdutoAtivo", dadosProduto.ProdutoAtivo);
-                    cmd.Parameters.AddWithValue("@Id", dadosProduto.Id);
-                    da = new SQLiteDataAdapter(cmd.CommandText, _dbContext.DbConnection());
-                    da.Fill(dt);
-                    Produto Produto = JsonConvert.DeserializeObject<Produto>(JsonConvert.SerializeObject(dt));
-                    return Produto;
-                }
+
+                _dbContext.Produto.Add(dadosProduto);
+                _dbContext.SaveChanges();
+
+                return dadosProduto;
             }
             catch (Exception ex)
             {
@@ -118,18 +85,33 @@ namespace CompreSuaFruta.Dal.Concrete
         {
             try
             {
-                var conexao = _dbContext.DbConnection();
-                using (var cmd = conexao.CreateCommand())
-                {
-                    cmd.CommandText = "UPDATE Produto set ProdutoAtivo = 0 WHERE Id = @Id";
-                    cmd.Parameters.AddWithValue("@Id", dadosProduto.Id);
-                    cmd.ExecuteNonQuery();
-                }
+                dadosProduto.ProdutoAtivo = false;
+                _dbContext.Produto.Attach(dadosProduto);
+                _dbContext.Entry(dadosProduto).State = EntityState.Modified;
+                _dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
                 throw ex;
             }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        public void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _dbContext.Dispose();
+                }
+            }
+            _disposed = true;
         }
     }
 }

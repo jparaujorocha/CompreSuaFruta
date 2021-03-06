@@ -2,13 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using CompreSuaFruta.Dal.Context.Entities;
+using CompreSuaFruta.Model.Models;
 
 namespace CompreSuaFruta.Dal.Context.Contexts
 {
     public class ProdutoDbContext : DbContext
     {
-        public DbSet<Produto> Vendas { get; set; }
+        public DbSet<Produto> Produto { get; set; }
 
         public ProdutoDbContext(DbContextOptions<ProdutoDbContext> options) : base(options)
         { }

@@ -55,6 +55,7 @@ namespace CompreSuaFruta.Api.Areas.Identity.Pages.Account
                 ModelState.AddModelError(string.Empty, ErrorMessage);
             }
 
+            
             returnUrl = returnUrl ?? Url.Content("~/");
 
             // Clear the existing external cookie to ensure a clean login process
@@ -76,6 +77,7 @@ namespace CompreSuaFruta.Api.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Cpf, Input.Password, Input.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
+                    //Verificar Carrinho
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }

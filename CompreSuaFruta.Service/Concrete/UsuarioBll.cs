@@ -98,5 +98,16 @@ namespace CompreSuaFruta.Business.Concrete
                 throw ex;
             }
         }
+        public Usuario BuscarUsuarioCpf(string cpf)
+        {
+            try
+            {
+                return _usuarioDal.BuscarUsuarioCpf(cpf);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

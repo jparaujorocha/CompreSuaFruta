@@ -5,7 +5,7 @@ using CompreSuaFruta.Model.Models;
 
 namespace CompreSuaFruta.Dal.Interface
 {
-    public interface IUsuarioDal
+    public interface IUsuarioDal : IDisposable
     {
         Usuario BuscarUsuarioId(int id);
         Usuario BuscarUsuarioCpfSenha(string cpf, string senha);

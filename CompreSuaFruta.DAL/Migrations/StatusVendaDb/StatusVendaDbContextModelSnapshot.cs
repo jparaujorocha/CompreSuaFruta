@@ -15,7 +15,7 @@ namespace CompreSuaFruta.Dal.Migrations.StatusVendaDb
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.1.14-servicing-32113");
 
-            modelBuilder.Entity("CompreSuaFruta.Dal.Context.Entities.StatusVenda", b =>
+            modelBuilder.Entity("CompreSuaFruta.Model.Models.StatusVenda", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -24,7 +24,7 @@ namespace CompreSuaFruta.Dal.Migrations.StatusVendaDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("StatusVendas");
+                    b.ToTable("StatusVenda");
                 });
 #pragma warning restore 612, 618
         }

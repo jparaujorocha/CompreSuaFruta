@@ -7,34 +7,34 @@ using System.Text;
 using CompreSuaFruta.Model.Models;
 using System.Linq;
 using Newtonsoft.Json;
+using CompreSuaFruta.Dal.Context.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace CompreSuaFruta.Dal.Concrete
 {
     public class VendaDal : IVendaDal
     {
-        private readonly DalHelper _dbContext = new DalHelper();
+        private readonly VendaDbContext _dbContext;
+        private bool _disposed;
+
+        public VendaDal(VendaDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
 
         public Venda AtualizarVenda(Venda dadosVenda)
         {
-            SQLiteDataAdapter da = null;
-            DataTable dt = new DataTable();
             try
             {
-                var conexao = _dbContext.DbConnection();
-                using (var cmd = conexao.CreateCommand())
+                var localEntity = _dbContext.Set<Venda>().Local.FirstOrDefault(f => f.Id == dadosVenda.Id);
+                if (localEntity != null)
                 {
-                    cmd.CommandText = "UPDATE Venda set Data = @Data, Valor = @Valor, IdUsuario = @IdUsuario, Status = @Status, VendaAtiva = @VendaAtiva WHERE Id = @Id";
-                    cmd.Parameters.AddWithValue("@Id", dadosVenda.Id);
-                    cmd.Parameters.AddWithValue("@Data", dadosVenda.Data);
-                    cmd.Parameters.AddWithValue("@Valor", dadosVenda.Valor);
-                    cmd.Parameters.AddWithValue("@IdUsuario", dadosVenda.IdUsuario);
-                    cmd.Parameters.AddWithValue("@Status", dadosVenda.Status);
-                    cmd.Parameters.AddWithValue("@VendaAtiva", dadosVenda.VendaAtiva);
-                    da = new SQLiteDataAdapter(cmd.CommandText, _dbContext.DbConnection());
-                    da.Fill(dt);
-                    Venda venda = JsonConvert.DeserializeObject<Venda>(JsonConvert.SerializeObject(dt));
-                    return venda;
+                    _dbContext.Entry(localEntity).State = EntityState.Detached;
                 }
+                _dbContext.Venda.Attach(dadosVenda);
+                _dbContext.Entry(dadosVenda).State = EntityState.Modified;
+                _dbContext.SaveChanges();
+                return dadosVenda;
             }
             catch (Exception ex)
             {
@@ -44,19 +44,9 @@ namespace CompreSuaFruta.Dal.Concrete
 
         public Venda BuscarVendaId(int id)
         {
-            SQLiteDataAdapter da = null;
-            DataTable dt = new DataTable();
             try
             {
-                var conexao = _dbContext.DbConnection();
-                using (var cmd = conexao.CreateCommand())
-                {
-                    cmd.CommandText = "SELECT * FROM Venda Where Id= " + id;
-                    da = new SQLiteDataAdapter(cmd.CommandText, _dbContext.DbConnection());
-                    da.Fill(dt);
-                    Venda venda = JsonConvert.DeserializeObject<Venda>(JsonConvert.SerializeObject(dt));
-                    return venda;
-                }
+                return (from dados in _dbContext.Venda where dados.Id == id select dados).FirstOrDefault();
             }
             catch (Exception ex)
             {
@@ -66,65 +56,9 @@ namespace CompreSuaFruta.Dal.Concrete
 
         public List<Venda> BuscarVendas()
         {
-            SQLiteDataAdapter da = null;
-            DataTable dt = new DataTable();
             try
             {
-                var conexao = _dbContext.DbConnection();
-                using (var cmd = conexao.CreateCommand())
-                {
-                    cmd.CommandText = "SELECT * FROM Venda";
-                    da = new SQLiteDataAdapter(cmd.CommandText, _dbContext.DbConnection());
-                    da.Fill(dt);
-                    List<Venda> listaVendas = JsonConvert.DeserializeObject<List<Venda>>(JsonConvert.SerializeObject(dt));
-                    return listaVendas;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public List<Venda> BuscarVendasUsuario(int idUsuario)
-        {
-            SQLiteDataAdapter da = null;
-            DataTable dt = new DataTable();
-            try
-            {
-                var conexao = _dbContext.DbConnection();
-                using (var cmd = conexao.CreateCommand())
-                {
-                    cmd.CommandText = "SELECT * FROM Venda where IdUsuario = @IdUsuario";
-                    cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
-                    da = new SQLiteDataAdapter(cmd.CommandText, _dbContext.DbConnection());
-                    da.Fill(dt);
-                    List<Venda> listaVendas = JsonConvert.DeserializeObject<List<Venda>>(JsonConvert.SerializeObject(dt));
-                    return listaVendas;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public List<Venda> BuscarVendasPendenteUsuario(int idUsuario)
-        {
-            SQLiteDataAdapter da = null;
-            DataTable dt = new DataTable();
-            try
-            {
-                var conexao = _dbContext.DbConnection();
-                using (var cmd = conexao.CreateCommand())
-                {
-                    cmd.CommandText = "SELECT * FROM Venda where IdUsuario = @IdUsuario, IdStatus = 2";
-                    cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
-                    da = new SQLiteDataAdapter(cmd.CommandText, _dbContext.DbConnection());
-                    da.Fill(dt);
-                    List<Venda> listaVendas = JsonConvert.DeserializeObject<List<Venda>>(JsonConvert.SerializeObject(dt));
-                    return listaVendas;
-                }
+                return (from dados in _dbContext.Venda select dados).ToList();
             }
             catch (Exception ex)
             {
@@ -134,25 +68,13 @@ namespace CompreSuaFruta.Dal.Concrete
 
         public Venda InserirVenda(Venda dadosVenda)
         {
-            SQLiteDataAdapter da = null;
-            DataTable dt = new DataTable();
             try
             {
-                var conexao = _dbContext.DbConnection();
-                using (var cmd = conexao.CreateCommand())
-                {
-                    cmd.CommandText = "INSERT INTO Venda(Id, Data, Valor, IdUsuario, Status, VendaAtiva) values (@Id, @Data, @Valor, @IdUsuario, @Status, @VendaAtiva)";
-                    cmd.Parameters.AddWithValue("@Id", dadosVenda.Id);
-                    cmd.Parameters.AddWithValue("@Data", dadosVenda.Data);
-                    cmd.Parameters.AddWithValue("@Valor", dadosVenda.Valor);
-                    cmd.Parameters.AddWithValue("@IdUsuario", dadosVenda.IdUsuario);
-                    cmd.Parameters.AddWithValue("@Status", dadosVenda.Status);
-                    cmd.Parameters.AddWithValue("@VendaAtiva", dadosVenda.VendaAtiva);
-                    da = new SQLiteDataAdapter(cmd.CommandText, _dbContext.DbConnection());
-                    da.Fill(dt);
-                    Venda venda = JsonConvert.DeserializeObject<Venda>(JsonConvert.SerializeObject(dt));
-                    return venda;
-                }
+
+                _dbContext.Venda.Add(dadosVenda);
+                _dbContext.SaveChanges();
+
+                return dadosVenda;
             }
             catch (Exception ex)
             {
@@ -164,13 +86,52 @@ namespace CompreSuaFruta.Dal.Concrete
         {
             try
             {
-                var conexao = _dbContext.DbConnection();
-                using (var cmd = conexao.CreateCommand())
+                dadosVenda.VendaAtiva = false;
+                _dbContext.Venda.Attach(dadosVenda);
+                _dbContext.Entry(dadosVenda).State = EntityState.Modified;
+                _dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        public void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
                 {
-                    cmd.CommandText = "UPDATE Venda set VendaAtiva = 0 WHERE Id = @Id";
-                    cmd.Parameters.AddWithValue("@Id", dadosVenda.Id);
-                    cmd.ExecuteNonQuery();
+                    _dbContext.Dispose();
                 }
+            }
+            _disposed = true;
+        }
+
+        public List<Venda> BuscarVendasUsuario(int idUsuario)
+        {
+            try
+            {
+                return (from dados in _dbContext.Venda where dados.IdUsuario == idUsuario select dados).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public List<Venda> BuscarVendasPendenteUsuario(int idUsuario)
+        {
+            try
+            {
+                return (from dados in _dbContext.Venda where dados.IdUsuario == idUsuario && dados.Status == 2 select dados).ToList();
             }
             catch (Exception ex)
             {

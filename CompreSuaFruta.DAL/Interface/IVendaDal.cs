@@ -5,7 +5,7 @@ using CompreSuaFruta.Model.Models;
 
 namespace CompreSuaFruta.Dal.Interface
 {
-    public interface IVendaDal
+    public interface IVendaDal : IDisposable
     {
         Venda BuscarVendaId(int id);
         List<Venda> BuscarVendasUsuario(int idUsuario);

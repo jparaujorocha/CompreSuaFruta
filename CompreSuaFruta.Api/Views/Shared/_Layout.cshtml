@@ -1,9 +1,19 @@
-﻿<!DOCTYPE html>
+﻿@using CompreSuaFruta.Model.Models
+<!DOCTYPE html>
+@{
+    List<ProdutoCarrinho> itensCarrinho = (List<ProdutoCarrinho>)ViewBag["itensCarrinho"];
+    int numeroItens = 0;
+
+    if (itensCarrinho != null && itensCarrinho.Count > 0)
+    {
+        numeroItens = (int)ViewBag["numeroItens"];
+    }
+}
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - CompreSuaFruta.Api</title>
+    <title>@ViewData["Title"] - Compre sua Fruta</title>
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />

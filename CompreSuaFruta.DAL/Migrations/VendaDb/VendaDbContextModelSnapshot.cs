@@ -16,16 +16,16 @@ namespace CompreSuaFruta.Dal.Migrations.VendaDb
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.1.14-servicing-32113");
 
-            modelBuilder.Entity("CompreSuaFruta.Dal.Context.Entities.Venda", b =>
+            modelBuilder.Entity("CompreSuaFruta.Model.Models.Venda", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("Data");
 
-                    b.Property<int>("IdStatus");
-
                     b.Property<int>("IdUsuario");
+
+                    b.Property<int>("Status");
 
                     b.Property<double>("Valor");
 
@@ -33,7 +33,7 @@ namespace CompreSuaFruta.Dal.Migrations.VendaDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("Vendas");
+                    b.ToTable("Venda");
                 });
 #pragma warning restore 612, 618
         }
