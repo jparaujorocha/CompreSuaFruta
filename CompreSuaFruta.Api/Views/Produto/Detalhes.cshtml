@@ -1,8 +1,27 @@
 ﻿@model CompreSuaFruta.Model.Models.Produto
+@using CompreSuaFruta.Model.Models
+@using Newtonsoft.Json;
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalhes do Produto";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var itensCarrinho = (List<ProdutoCarrinho>)ViewData["itensCarrinho"];
+    int numeroItens = 0;
+    string mensagem = (string)ViewData["Mensagem"];
+
+    if (itensCarrinho != null && itensCarrinho.Count > 0)
+    {
+        numeroItens = (int)ViewData["numeroItens"];
+    }
+    TempData["itensCarrinho"] = JsonConvert.SerializeObject(itensCarrinho);
+    TempData["numeroItens"] = numeroItens;
+}
+
+@if (String.IsNullOrWhiteSpace(mensagem) == false)
+{
+    <div class="row alert alert-info">
+        <h5>@mensagem</h5>
+    </div>
 }
 
 <h2>@Model.Nome</h2>
@@ -25,7 +44,7 @@
                         <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
                         <span class="sr-only">Voltar</span>
                     </a>
-                    <a class="btn btn-default" href="@Url.Action("Adicionar", "Carrinho", new { id = Model.Id })">
+                    <a class="btn btn-default" href="@Url.Action("AdicionarItem", "Carrinho", new { idProduto = Model.Id })">
 
                         <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
                         <span class="sr-only">Adicionar ao carrinho</span>

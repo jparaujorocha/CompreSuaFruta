@@ -54,7 +54,7 @@ namespace CompreSuaFruta.Dal.Concrete
             }
         }
 
-        public List<ProdutoVenda> BuscarProdutoVendas()
+        public List<ProdutoVenda> BuscarProdutosVenda()
         {
             try
             {
@@ -100,29 +100,31 @@ namespace CompreSuaFruta.Dal.Concrete
             _disposed = true;
         }
 
-        public List<ProdutoVenda> BuscarProdutosCarrinhoVenda(int idVenda)
+        public List<ProdutoVenda> BuscarProdutosVenda(int idVenda)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return (from dados in _dbContext.ProdutoVenda where dados.IdVenda == idVenda select dados).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
-        public List<ProdutoVenda> BuscarProdutosCarrinho()
-        {
-            throw new NotImplementedException();
-        }
 
-        List<ProdutoVenda> IProdutoVendaDal.InserirProdutoVenda(ProdutoVenda dadosProdutoVenda)
+        public void RemoverProdutoVenda(ProdutoVenda dadosProdutoVenda)
         {
-            throw new NotImplementedException();
-        }
-
-        List<ProdutoVenda> IProdutoVendaDal.AtualizarProdutoVenda(ProdutoVenda dadosProdutoVenda)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<ProdutoVenda> RemoverProdutoVenda(ProdutoVenda dadosProdutoVenda)
-        {
-            throw new NotImplementedException();
+            try
+            {
+                _dbContext.ProdutoVenda.Remove(dadosProdutoVenda);
+                _dbContext.Entry(dadosProdutoVenda).State = EntityState.Modified;
+                _dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

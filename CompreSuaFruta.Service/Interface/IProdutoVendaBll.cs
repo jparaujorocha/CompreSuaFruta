@@ -10,8 +10,8 @@ namespace CompreSuaFruta.Business.Interface
         ProdutoVenda BuscarProdutoVendaId(int id);
         List<ProdutoVenda> BuscarProdutosCarrinhoVenda(int idVenda);
         List<ProdutoVenda> BuscarProdutosCarrinho();
-        List<ProdutoVenda> InserirProdutoVenda(ProdutoVenda dadosProdutoVenda);
-        List<ProdutoVenda> AtualizarProdutoVenda(ProdutoVenda dadosProdutoVenda);
-        List<ProdutoVenda> RemoverProdutoVenda(int idProdutoVenda);
+        ProdutoVenda InserirProdutoVenda(ProdutoVenda dadosProdutoVenda);
+        ProdutoVenda AtualizarProdutoVenda(ProdutoVenda dadosProdutoVenda);
+        void RemoverProdutoVenda(int idProdutoVenda);
     }
 }

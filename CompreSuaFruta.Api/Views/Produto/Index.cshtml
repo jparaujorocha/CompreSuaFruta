@@ -1,66 +1,82 @@
 ﻿@model IEnumerable<CompreSuaFruta.Model.Models.Produto>
+@using CompreSuaFruta.Model.Models
+@using Newtonsoft.Json;
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Produtos";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var itensCarrinho = (List<ProdutoCarrinho>)ViewData["itensCarrinho"];
+    int numeroItens = 0;
+    string mensagem = (string)ViewData["Mensagem"];
+
+    if (itensCarrinho != null && itensCarrinho.Count > 0)
+    {
+        numeroItens = (int)ViewData["numeroItens"];
+    }
+    TempData["itensCarrinho"] = JsonConvert.SerializeObject(itensCarrinho);
+    TempData["numeroItens"] = numeroItens;
 }
 
-<h2>Index</h2>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nome)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CaminhoImagem)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Descricao)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.QuantidadeDisponivel)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Valor)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProdutoAtivo)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CaminhoImagem)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descricao)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.QuantidadeDisponivel)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Valor)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProdutoAtivo)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+@if (String.IsNullOrWhiteSpace(mensagem) == false)
+{
+    <div class="row alert alert-info">
+        <h5>@mensagem</h5>
+    </div>
 }
-    </tbody>
-</table>
+
+<div class="row margintop20">
+    <div class="col-xs-12">
+        <h2>
+            <i class="fa fa-book"></i>
+            Todos os produtos
+        </h2>
+    </div>
+</div>
+<div class="row margintop10">
+    <div class="col-sm-12 col-xs-12">
+        @if (Model != null && Model.Count() > 0)
+        {
+            <div class="list-group">
+                @foreach (var item in Model)
+                {
+                    <div class="col-md-4 list-group-item" style="align-items:center; text-align:center; align-content:center">
+
+                        <a href="@Url.Action("Detalhes", "Produto", new { id = item.Id })">
+                            <img src="@Url.Content(item.CaminhoImagem)" alt=@item.Nome style="width: 180px; align-items:baseline" class="img-responsive">
+
+                            <div class="clearfix visible-xs"></div>
+                            <div class="media-body">
+
+                                <div class="col-md-pull-4 margintop10 marginbottom10 hidden-xs">
+
+                                    <div class="text-danger font-weight-bold h2">@string.Format("R$ {0:N2}", item.Valor)</div>
+
+                                    <h4 class="media-heading">@item.Nome</h4>
+
+
+                                    <a class="btn btn-default" href="@Url.Action("Detalhes", "Produto", new { id = item.Id })">
+                                        <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+                                        <span class="sr-only">Detalhes</span>
+                                    </a>
+                                    <a class="btn btn-default" href="@Url.Action("AdicionarItem", "Carrinho", new { idProduto = item.Id })">
+
+                                        <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
+                                        <span class="sr-only">Adicionar ao carrinho</span>
+                                    </a>
+
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="margintop20 text-center">
+                <text>Nenhum produto disponível ou cadastrado!</text>
+            </div>
+        }
+    </div>
+</div>

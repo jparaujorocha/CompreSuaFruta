@@ -10,6 +10,7 @@ namespace CompreSuaFruta.Model.Models
         [Key]
         public int Id { get; set; }
         public int IdProduto { get; set; }
+        public int IdVenda { get; set; }
         public int QuantidadeProduto { get; set; }
         public double ValorUnitario { get; set; }
         public double ValorTotal { get; set; }

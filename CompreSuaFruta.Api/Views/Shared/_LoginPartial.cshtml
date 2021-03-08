@@ -1,14 +1,37 @@
 @using Microsoft.AspNetCore.Identity
+@using CompreSuaFruta.Model.Models
+@using Newtonsoft.Json;
 
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
+
+
+@{
+
+    var itensCarrinho = (List<ProdutoCarrinho>)ViewData["itensCarrinho"];
+    int numeroItens = 0;
+    string mensagem = (string)ViewData["Mensagem"];
+
+    if (itensCarrinho != null && itensCarrinho.Count > 0)
+    {
+        numeroItens = (int)ViewData["numeroItens"];
+    }
+    TempData["itensCarrinho"] = JsonConvert.SerializeObject(itensCarrinho);
+    TempData["numeroItens"] = numeroItens;
+}
+
+
 
 @if (SignInManager.IsSignedIn(User))
 {
     <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
         <ul class="nav navbar-nav navbar-right">
             <li>
-                <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+                <a href="@Url.Action("Index", "Carrinho")">
+                    <span class="badge badge-danger text-right">@numeroItens</span>
+                    <i class="glyphicon glyphicon-shopping-cart"></i>
+                    Carrinho
+                </a>
             </li>
             <li>
                 <button type="submit" class="btn btn-link navbar-btn navbar-link">Logout</button>
@@ -19,7 +42,7 @@
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li><a asp-area="Identity" asp-page="/Account/Register">Register</a></li>
+        <li><a asp-area="Identity" asp-page="/Account/Register">Cadastrar</a></li>
         <li><a asp-area="Identity" asp-page="/Account/Login">Login</a></li>
     </ul>
 }

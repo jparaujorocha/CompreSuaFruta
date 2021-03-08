@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using CompreSuaFruta.Model.Models;
 
 namespace CompreSuaFruta.Api.Areas.Identity.Pages.Account
 {
@@ -42,6 +44,7 @@ namespace CompreSuaFruta.Api.Areas.Identity.Pages.Account
 
             [Required]
             [DataType(DataType.Password)]
+            [Display(Name = "Senha")]
             public string Password { get; set; }
 
             [Display(Name = "Remember me?")]
@@ -55,7 +58,6 @@ namespace CompreSuaFruta.Api.Areas.Identity.Pages.Account
                 ModelState.AddModelError(string.Empty, ErrorMessage);
             }
 
-            
             returnUrl = returnUrl ?? Url.Content("~/");
 
             // Clear the existing external cookie to ensure a clean login process
@@ -69,6 +71,27 @@ namespace CompreSuaFruta.Api.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
+
+            List<ProdutoCarrinho> itensCarrinho = new List<ProdutoCarrinho>();
+            if (TempData["itensCarrinho"] != null)
+            {
+                itensCarrinho = JsonConvert.DeserializeObject<List<ProdutoCarrinho>>((string)TempData["itensCarrinho"]);
+                if (itensCarrinho != null && itensCarrinho.Count > 0)
+                {
+                    ViewData["itensCarrinho"] = itensCarrinho;
+                    ViewData["numeroItens"] = itensCarrinho.Count();
+                }
+                else
+                {
+                    ViewData["itensCarrinho"] = null;
+                    ViewData["numeroItens"] = 0;
+                }
+            }
+            else
+            {
+                ViewData["itensCarrinho"] = null;
+                ViewData["numeroItens"] = 0;
+            }
 
             if (ModelState.IsValid)
             {

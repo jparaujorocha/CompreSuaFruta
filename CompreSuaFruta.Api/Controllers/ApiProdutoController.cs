@@ -27,8 +27,8 @@ namespace CompreSuaFruta.Api.Controllers
         /// </summary>
         /// <returns></returns>
         // GET api/values
-        [HttpPost]
-        //[Route("produtos")]
+        [HttpGet]
+        [Route("")]
         [ProducesResponseType(typeof(string), 400)]
         [ProducesResponseType(typeof(List<Produto>), 200)]
         public IActionResult BuscaProdutos()
@@ -141,7 +141,7 @@ namespace CompreSuaFruta.Api.Controllers
         /// </summary>
         /// <returns></returns>
         // GET api/values
-        [HttpGet]
+        [HttpPost]
         [Route("atualizarproduto")]
         [ProducesResponseType(typeof(string), 400)]
         [ProducesResponseType(typeof(Produto), 200)]

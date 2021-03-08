@@ -16,7 +16,7 @@ namespace CompreSuaFruta.Business.Concrete
         {
             this._produtoCarrinhoDal = produtoCarrinho;
         }
-        public List<ProdutoVenda> AtualizarProdutoVenda(ProdutoVenda dadosProdutoVenda)
+        public ProdutoVenda AtualizarProdutoVenda(ProdutoVenda dadosProdutoVenda)
         {
             try
             {
@@ -46,7 +46,7 @@ namespace CompreSuaFruta.Business.Concrete
         {
             try
             {
-                return _produtoCarrinhoDal.BuscarProdutosCarrinho();
+                return _produtoCarrinhoDal.BuscarProdutosVenda();
 
             }
             catch (Exception ex)
@@ -59,7 +59,7 @@ namespace CompreSuaFruta.Business.Concrete
         {
             try
             {
-                return _produtoCarrinhoDal.BuscarProdutosCarrinhoVenda(idVenda);
+                return _produtoCarrinhoDal.BuscarProdutosVenda(idVenda);
 
             }
             catch (Exception ex)
@@ -68,12 +68,10 @@ namespace CompreSuaFruta.Business.Concrete
             }
         }
 
-        public List<ProdutoVenda> InserirProdutoVenda(ProdutoVenda dadosProdutoVenda)
+        public ProdutoVenda InserirProdutoVenda(ProdutoVenda dadosProdutoVenda)
         {
             try
             {
-                dadosProdutoVenda.Id = _produtoCarrinhoDal.BuscarProdutosCarrinho().Select(c => c.Id).Max() + 1;
-
                 return _produtoCarrinhoDal.InserirProdutoVenda(dadosProdutoVenda);
 
             }
@@ -83,12 +81,12 @@ namespace CompreSuaFruta.Business.Concrete
             }
         }
 
-        public List<ProdutoVenda> RemoverProdutoVenda(int idProdutoVenda)
+        public void RemoverProdutoVenda(int idProdutoVenda)
         {
             try
             {
                 ProdutoVenda dadosProduto = _produtoCarrinhoDal.BuscarProdutoVendaId(idProdutoVenda);
-               return _produtoCarrinhoDal.RemoverProdutoVenda(dadosProduto);
+               _produtoCarrinhoDal.RemoverProdutoVenda(dadosProduto);
             }
             catch (Exception ex)
             {

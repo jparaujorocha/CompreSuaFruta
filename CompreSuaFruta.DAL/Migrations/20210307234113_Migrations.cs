@@ -13,6 +13,7 @@ namespace CompreSuaFruta.Dal.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     IdProduto = table.Column<int>(nullable: false),
+                    IdVenda = table.Column<int>(nullable: false),
                     QuantidadeProduto = table.Column<int>(nullable: false),
                     ValorUnitario = table.Column<double>(nullable: false),
                     ValorTotal = table.Column<double>(nullable: false)

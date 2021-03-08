@@ -22,6 +22,8 @@ namespace CompreSuaFruta.Dal.Migrations
 
                     b.Property<int>("IdProduto");
 
+                    b.Property<int>("IdVenda");
+
                     b.Property<int>("QuantidadeProduto");
 
                     b.Property<double>("ValorTotal");

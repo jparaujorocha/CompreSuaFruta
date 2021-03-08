@@ -58,7 +58,6 @@ namespace CompreSuaFruta.Business.Concrete
         {
             try
             {
-                int idVenda = _vendaDal.BuscarVendas().Select(c => c.Id).Max() + 1;
                 return _vendaDal.InserirVenda(dadosVenda);
             }
             catch (Exception ex)

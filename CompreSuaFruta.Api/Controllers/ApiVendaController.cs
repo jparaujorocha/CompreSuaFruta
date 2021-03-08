@@ -26,7 +26,7 @@ namespace CompreSuaFruta.Api.Controllers
         /// </summary>
         /// <returns></returns>
         // GET api/values
-        [HttpPost]
+        [HttpGet]
         [ProducesResponseType(typeof(string), 400)]
         [ProducesResponseType(typeof(List<Venda>), 200)]
         public IActionResult BuscaVendas()
@@ -94,7 +94,7 @@ namespace CompreSuaFruta.Api.Controllers
             {
                 _vendaBll.DesativarVenda(id);
 
-                return Ok("Venda Desativado com sucesso.");
+                return Ok("Venda Desativada com sucesso.");
             }
             catch (Exception ex)
             {

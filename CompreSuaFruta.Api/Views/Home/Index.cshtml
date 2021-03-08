@@ -1,8 +1,27 @@
 ﻿@model IEnumerable<CompreSuaFruta.Model.Models.Produto>
+@using CompreSuaFruta.Model.Models
+@using Newtonsoft.Json;
 @{
     ViewData["Title"] = "Home";
+
+    var itensCarrinho = (List<ProdutoCarrinho>)ViewData["itensCarrinho"];
+    int numeroItens = 0;
+
+    string mensagem = (string)ViewData["Mensagem"];
+    if (itensCarrinho != null && itensCarrinho.Count > 0)
+    {
+        numeroItens = (int)ViewData["numeroItens"];
+    }
+    TempData["itensCarrinho"] = JsonConvert.SerializeObject(itensCarrinho);
+    TempData["numeroItens"] = numeroItens;
 }
 
+@if (String.IsNullOrWhiteSpace(mensagem) == false)
+{
+    <div class="row alert alert-info">
+        <h5>@mensagem</h5>
+    </div>
+}
 <div class="row" style="align-items:center; text-align:center; align-content:center">
     <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
         <ol class="carousel-indicators">
@@ -21,13 +40,13 @@
                         <div class="carousel-caption" role="option">
                             <p style="color:black">
                                 @item.Nome
-
-                                <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525028&clcid=0x409">
+                                @string.Format("R$ {0:N2}", item.Valor)
+                                <a class="btn btn-default" href="@Url.Action("Detalhes", "Produto", new { id = item.Id })">
 
                                     <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
                                     <span class="sr-only">Detalhes</span>
                                 </a>
-                                <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525028&clcid=0x409">
+                                <a class="btn btn-default" href="@Url.Action("AdicionarItem", "Carrinho", new { idProduto = item.Id })">
 
                                     <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
                                     <span class="sr-only">Adicionar ao carrinho</span>
@@ -44,14 +63,14 @@
                             <p style="color:black">
 
                                 @item.Nome
+                                @string.Format("R$ {0:N2}", item.Valor)
 
-
-                                <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525028&clcid=0x409">
+                                <a class="btn btn-default" href="@Url.Action("Detalhes", "Produto", new { id = item.Id })">
 
                                     <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
                                     <span class="sr-only">Detalhes</span>
                                 </a>
-                                <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525028&clcid=0x409">
+                                <a class="btn btn-default" href="@Url.Action("AdicionarItem", "Carrinho", new { idProduto = item.Id })">
 
                                     <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
                                     <span class="sr-only">Adicionar ao carrinho</span>
@@ -86,8 +105,9 @@
         <div class="list-group">
             @foreach (var item in Model)
             {
-                <a href="@Url.Action("Detalhes", "Produto", new { id = item.Id })">
-                    <div class="col-md-4 list-group-item" style="align-items:center; text-align:center; align-content:center">
+                <div class="col-md-4 list-group-item" style="align-items:center; text-align:center; align-content:center">
+
+                    <a href="@Url.Action("Detalhes", "Produto", new { id = item.Id })">
                         <img src="@Url.Content(item.CaminhoImagem)" alt=@item.Nome style="width: 180px; align-items:baseline" class="img-responsive">
 
                         <div class="clearfix visible-xs"></div>
@@ -99,11 +119,12 @@
 
                                 <h4 class="media-heading">@item.Nome</h4>
 
+
                                 <a class="btn btn-default" href="@Url.Action("Detalhes", "Produto", new { id = item.Id })">
                                     <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
                                     <span class="sr-only">Detalhes</span>
                                 </a>
-                                <a class="btn btn-default" href="@Url.Action("Adicionar", "Carrinho", new { id = item.Id })">
+                                <a class="btn btn-default" href="@Url.Action("AdicionarItem", "Carrinho", new { idProduto = item.Id })">
 
                                     <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
                                     <span class="sr-only">Adicionar ao carrinho</span>
@@ -111,8 +132,8 @@
 
                             </div>
                         </div>
-                    </div>
-                </a>
+                    </a>
+                </div>
             }
         </div>
     </div>

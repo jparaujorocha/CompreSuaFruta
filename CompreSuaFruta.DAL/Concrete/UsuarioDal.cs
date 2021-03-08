@@ -14,8 +14,8 @@ namespace CompreSuaFruta.Dal.Concrete
 {
     public class UsuarioDal : IUsuarioDal
     {
-        private readonly UsuarioDbContext _dbContext;
         private bool _disposed;
+        private readonly UsuarioDbContext _dbContext;
 
         public UsuarioDal(UsuarioDbContext dbContext)
         {

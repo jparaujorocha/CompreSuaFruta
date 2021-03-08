@@ -8,10 +8,10 @@ namespace CompreSuaFruta.Dal.Interface
     public interface IProdutoVendaDal : IDisposable
     {
         ProdutoVenda BuscarProdutoVendaId(int id);
-        List<ProdutoVenda> BuscarProdutosCarrinhoVenda(int idVenda);
-        List<ProdutoVenda> BuscarProdutosCarrinho();
-        List<ProdutoVenda> InserirProdutoVenda(ProdutoVenda dadosProdutoVenda);
-        List<ProdutoVenda> AtualizarProdutoVenda(ProdutoVenda dadosProdutoVenda);
-        List<ProdutoVenda> RemoverProdutoVenda(ProdutoVenda dadosProdutoVenda);
+        List<ProdutoVenda> BuscarProdutosVenda(int idVenda);
+        List<ProdutoVenda> BuscarProdutosVenda();
+        ProdutoVenda InserirProdutoVenda(ProdutoVenda dadosProdutoVenda);
+        ProdutoVenda AtualizarProdutoVenda(ProdutoVenda dadosProdutoVenda);
+        void RemoverProdutoVenda(ProdutoVenda dadosProdutoVenda);
     }
 }

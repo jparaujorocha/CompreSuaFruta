@@ -1,7 +1,19 @@
 ﻿@page
 @model RegisterModel
+@using CompreSuaFruta.Model.Models
+@using Newtonsoft.Json;
 @{
     ViewData["Title"] = "Registrar";
+    var itensCarrinho = (List<ProdutoCarrinho>)ViewData["itensCarrinho"];
+    int numeroItens = 0;
+    string mensagem = (string)ViewData["Mensagem"];
+
+    if (itensCarrinho != null && itensCarrinho.Count > 0)
+    {
+        numeroItens = (int)ViewData["numeroItens"];
+    }
+    TempData["itensCarrinho"] = JsonConvert.SerializeObject(itensCarrinho);
+    TempData["numeroItens"] = numeroItens;
 }
 
 <h2>@ViewData["Title"]</h2>

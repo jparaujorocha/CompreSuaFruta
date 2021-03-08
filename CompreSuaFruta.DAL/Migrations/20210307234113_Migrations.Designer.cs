@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CompreSuaFruta.Dal.Migrations
 {
     [DbContext(typeof(ProdutoVendaDbContext))]
-    [Migration("20210306181608_Migrations")]
+    [Migration("20210307234113_Migrations")]
     partial class Migrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,6 +23,8 @@ namespace CompreSuaFruta.Dal.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("IdProduto");
+
+                    b.Property<int>("IdVenda");
 
                     b.Property<int>("QuantidadeProduto");
 

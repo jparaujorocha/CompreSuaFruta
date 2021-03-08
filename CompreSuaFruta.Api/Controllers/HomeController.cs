@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using CompreSuaFruta.Api.Models;
 using CompreSuaFruta.Business.Interface;
+using CompreSuaFruta.Model.Models;
+using Newtonsoft.Json;
 
 namespace CompreSuaFruta.Api.Controllers
 {
@@ -20,37 +22,33 @@ namespace CompreSuaFruta.Api.Controllers
         {
             try
             {
+                ViewData["Mensagem"] = TempData["Mensagem"];
+                List<ProdutoCarrinho> itensCarrinho = new List<ProdutoCarrinho>();
+
+                if (TempData["itensCarrinho"] != null)
+                {
+                    itensCarrinho = JsonConvert.DeserializeObject<List<ProdutoCarrinho>>((string)TempData["itensCarrinho"]);
+                }
+
+                if (itensCarrinho != null && itensCarrinho.Count > 0)
+                {
+                    ViewData["itensCarrinho"] = itensCarrinho;
+                    ViewData["numeroItens"] = itensCarrinho.Count();
+                }
+                else
+                {
+                    ViewData["itensCarrinho"] = new List<ProdutoCarrinho>();
+                    ViewData["numeroItens"] = 0;
+                }
+
                 return View(_produtoBll.BuscarProdutos());
+
             }
             catch (Exception ex)
             {
-                return View("Erro: " + ex.Message);
+                TempData["Mensagem"] = "Erro: " + ex.Message;
+                return RedirectToAction("Index", "Carrinho");
             }
-        }
-
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
