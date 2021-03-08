@@ -1,4 +1,4 @@
-- Projeto criado seguindo padrão MVC, com backend em .NetCore
+- Projeto criado seguindo padrão MVC, com backend em .NetCore e banco de dados SQLite
 
 - A inserção de produtos no carrinho é feita após cadastro e login do usuário.
 
